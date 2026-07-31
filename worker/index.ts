@@ -360,7 +360,7 @@ const CORS_HEADERS = {
 };
 
 const VERCEL_FALLBACK =
-  "https://mc-ping-git-master-realikun2024-3211s-projects.vercel.app/api/query";
+  "https://mc-ping-zeta.vercel.app/api/query";
 
 async function queryViaVercel(address: string): Promise<ServerResult> {
   const res = await fetch(`${VERCEL_FALLBACK}?address=${encodeURIComponent(address)}`, {
