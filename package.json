@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "worker:dev": "wrangler dev --port 8787",
+    "worker:deploy": "wrangler deploy"
   },
   "dependencies": {
     "next": "16.2.12",
@@ -21,6 +23,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.116.0"
   }
 }

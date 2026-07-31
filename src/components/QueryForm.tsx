@@ -1,24 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef, FormEvent } from "react";
-
-export interface ServerData {
-  online: boolean;
-  host: string;
-  port: number;
-  version?: string;
-  protocol?: number;
-  motd?: string;
-  motdRaw?: string;
-  playersOnline?: number;
-  playersMax?: number;
-  playerList?: string[];
-  favicon?: string;
-  latency?: number;
-  serverType?: string;
-  modInfo?: { type: string; modList: { modid: string; version: string }[] };
-  error?: string;
-}
+import { queryServer } from "@/lib/api";
+export type { ServerData } from "@/lib/api";
+import type { ServerData } from "@/lib/api";
 
 interface QueryFormProps {
   onQuery: (data: ServerData, address: string) => void;
@@ -56,10 +41,7 @@ export default function QueryForm({
       onLoading(true);
 
       try {
-        const res = await fetch(
-          `/api/query?address=${encodeURIComponent(trimmed)}`
-        );
-        const data: ServerData = await res.json();
+        const data = await queryServer(trimmed);
         onQuery(data, trimmed);
       } catch {
         onQuery({ online: false, host: trimmed, port: 25565, error: "网络请求失败" }, trimmed);
@@ -74,8 +56,7 @@ export default function QueryForm({
     (serverAddress: string) => {
       setAddress(serverAddress);
       onLoading(true);
-      fetch(`/api/query?address=${encodeURIComponent(serverAddress)}`)
-        .then((res) => res.json())
+      queryServer(serverAddress)
         .then((data: ServerData) => onQuery(data, serverAddress))
         .catch(() =>
           onQuery({ online: false, host: serverAddress, port: 25565, error: "网络请求失败" }, serverAddress)

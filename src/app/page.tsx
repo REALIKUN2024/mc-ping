@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import QueryForm, { ServerData } from "@/components/QueryForm";
+import QueryForm from "@/components/QueryForm";
 import ServerResult from "@/components/ServerResult";
+import { queryServer } from "@/lib/api";
+import type { ServerData } from "@/lib/api";
 
 export default function Home() {
   const [serverData, setServerData] = useState<ServerData | null>(null);
@@ -21,8 +23,7 @@ export default function Home() {
   const handleRetry = useCallback(() => {
     if (!lastAddress || isLoading) return;
     setIsLoading(true);
-    fetch(`/api/query?address=${encodeURIComponent(lastAddress)}`)
-      .then((res) => res.json())
+    queryServer(lastAddress)
       .then((data: ServerData) => setServerData(data))
       .catch(() =>
         setServerData({ online: false, host: lastAddress, port: 25565, error: "网络请求失败" })

@@ -24,6 +24,10 @@
 # misc
 .DS_Store
 *.pem
+/*.png
+
+# cloudflare worker
+/.wrangler
 
 # debug
 npm-debug.log*
