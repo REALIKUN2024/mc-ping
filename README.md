@@ -5,7 +5,6 @@
 ## 在线体验
 
 - 前端：https://mc-ping-site.pages.dev
-- API：https://api.mc-ping.top/query?address=服务器地址
 
 ## 功能
 
@@ -82,7 +81,6 @@ Real-time Minecraft Java Edition server status checker. Query online status, pla
 ## Live Demo
 
 - Frontend: https://mc-ping-site.pages.dev
-- API: https://api.mc-ping.top/query?address=server-address
 
 ## Features
 
