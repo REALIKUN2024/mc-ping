@@ -359,6 +359,17 @@ const CORS_HEADERS = {
   "Access-Control-Max-Age": "86400",
 };
 
+const VERCEL_FALLBACK =
+  "https://mc-ping-git-master-realikun2024-3211s-projects.vercel.app/api/query";
+
+async function queryViaVercel(address: string): Promise<ServerResult> {
+  const res = await fetch(`${VERCEL_FALLBACK}?address=${encodeURIComponent(address)}`, {
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(`Vercel 兜底失败 (HTTP ${res.status})`);
+  return res.json() as Promise<ServerResult>;
+}
+
 export default {
   async fetch(request: Request): Promise<Response> {
     if (request.method === "OPTIONS") {
@@ -396,12 +407,19 @@ export default {
       return new Response(JSON.stringify(result), {
         headers: { "Content-Type": "application/json", ...CORS_HEADERS },
       });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "查询失败";
-      return new Response(JSON.stringify({ host, port, online: false, error: message }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...CORS_HEADERS },
-      });
+    } catch {
+      try {
+        const fallbackResult = await queryViaVercel(address);
+        return new Response(JSON.stringify(fallbackResult), {
+          headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+        });
+      } catch (fallbackErr) {
+        const message = fallbackErr instanceof Error ? fallbackErr.message : "查询失败";
+        return new Response(JSON.stringify({ host, port, online: false, error: message }), {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+        });
+      }
     }
   },
 } satisfies ExportedHandler;
