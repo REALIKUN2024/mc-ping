@@ -192,6 +192,10 @@ export default function ServerResult({ data, isLoading, onRetry }: ServerResultP
   }
 
   if (!data.online || data.error) {
+    const errText = data.error || "";
+    const isRegionBlocked =
+      /ECONNRESET|connection reset|reset by peer/i.test(errText);
+
     return (
       <div className="w-full max-w-xl flex items-center justify-center min-h-[300px]">
         <div className="w-full max-w-sm text-center animate-fade-in-up">
@@ -206,6 +210,14 @@ export default function ServerResult({ data, isLoading, onRetry }: ServerResultP
           <p className="text-sm text-zinc-400 dark:text-zinc-500 font-mono mb-6">
             {data.host && data.port ? `${data.host}:${data.port}` : data.host || ""}
           </p>
+
+          {isRegionBlocked && (
+            <div className="mb-6 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-4 py-3 text-left">
+              <p className="text-sm text-amber-600 dark:text-amber-500">
+                提示：该服务器可能限制了境外/非白名单 IP 访问，云端查询节点无法连接。建议使用本地电脑查询。
+              </p>
+            </div>
+          )}
 
           <div className="text-left inline-block mb-6">
             <p className="text-xs font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">
