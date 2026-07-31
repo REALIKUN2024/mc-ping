@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:export": "node scripts/export-build.js",
     "start": "next start",
     "lint": "eslint",
-    "worker:dev": "wrangler dev --port 8787",
-    "worker:deploy": "wrangler deploy"
+    "worker:dev": "wrangler dev --config worker/wrangler.worker.toml --port 8787",
+    "worker:deploy": "wrangler deploy --config worker/wrangler.worker.toml"
   },
   "dependencies": {
     "next": "16.2.12",
@@ -20,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
